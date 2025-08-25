@@ -12,6 +12,6 @@
 ## Установка:
 Клонируйте репозиторий: git clone https://github.com/Kirill48108/BasicsDjango1/tree/develop
 ## Установите зависимости:
-pip install -r requirements.txt
+poetry install
 ## Документация: - 
 ## Лицензия: - 
