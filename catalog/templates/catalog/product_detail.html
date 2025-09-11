@@ -1,0 +1,39 @@
+{% extends 'catalog/base.html' %}
+{% load my_tags %}
+{% block title %}Product Detail{% endblock %}
+{% block content %}
+<div class="container">
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+        <div class="col">
+            <div class="card mb-3">
+                {% if product.pic %}
+                <img src="{{ product.pic|media_filter }}" class="card-img-top fit-cover-center" alt="Product Image">
+                {% else %}
+                <div class="placeholder-image">
+                    <span>{{ product.name }}</span>
+                </div>
+                {% endif %}
+                <div class="card-body">
+                    <h5 class="card-title">{{ product.name }}</h5>
+                    <p class="card-text">{{ product.description }}</p>
+                </div>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">
+                        Price: {{ product.price }}
+                    </li>
+                    <li class="list-group-item">
+                        Category: {{ product.category }}
+                    </li>
+                    <li class="list-group-item">
+                        Created at {{ product.created_at|date:"d M Y" }}
+                    </li>
+                    <li class="list-group-item">
+                        Changed at: {{ product.changed_at|date:"d M Y" }}
+                    </li>
+                </ul>
+            </div>
+            <a class="btn btn-outline-primary btn-lg btn-block" href="{% url 'catalog:products' %}" role="button">Back</a>
+        </div>
+    </div>
+</div>
+{% endblock %}
