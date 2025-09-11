@@ -13,6 +13,11 @@
 <header data-bs-theme="dark">
     {% include 'catalog/menu.html'%}
 </header>
+
+<main class="container my-4">
+    {% block content %}{% endblock %}
+</main>
+
 <!-- ... existing code ... -->
 <footer class="text-body-secondary py-5 mt-3">
     <div class="container">
@@ -26,4 +31,5 @@
 <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
 </body>
 </html>
+
 
