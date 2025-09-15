@@ -1,0 +1,17 @@
+{% extends 'catalog/base.html' %}
+{% block title %}Your message sent{% endblock %}
+{% block content %}
+<div class="container d-flex flex-column justify-content-center align-items-center">
+  <div class="row">
+    <h3>Your product added to the Catalog</h3>
+    <div class="col mt-4">
+      <a class="btn btn-outline-primary btn-lg btn-block" href="{% url 'catalog:home' %}" role="button">
+        Back to Home
+      </a>
+      <a class="btn btn-outline-primary btn-lg btn-block" href="{% url 'catalog:add_product' %}" role="button">
+        Add another one
+      </a>
+    </div>
+  </div>
+</div>
+{% endblock %}
