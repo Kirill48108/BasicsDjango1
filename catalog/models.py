@@ -1,4 +1,10 @@
+
+from django.core.validators import RegexValidator
 from django.db import models
+from django.db.models import TextField
+
+
+
 
 
 # Create your models here.
@@ -33,3 +39,15 @@ class Product(models.Model):
         verbose_name = 'product'
         verbose_name_plural = 'products'
         ordering = ['-created_at']
+
+    # Validator
+phone_regex = RegexValidator(
+    regex=r'^(\+?\d{1,3})?(\d{10})$',
+    message="Phone number must be entered in the format: '+999999999'. Up to 15 digits allowed."
+    )
+class FeedBackMessage(models.Model):
+    """ Represents Feedback Message """
+    name = models.CharField(max_length=150, verbose_name='Name')
+    phone = models.CharField(validators=[phone_regex], max_length=17, verbose_name='Phone number')
+    message = TextField(verbose_name='Message', blank=False, null=False)
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name='Time of creation')

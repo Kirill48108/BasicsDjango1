@@ -1,68 +1,49 @@
-from django.shortcuts import render
-from django.http import HttpResponse
-from django.views.generic import DetailView
-from .models import Product
+from django.urls import reverse_lazy
+from django.views.generic import ListView, DetailView, CreateView, TemplateView
 
-from django.shortcuts import get_object_or_404, redirect
-from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
-from django import forms
+from catalog.models import Product, FeedBackMessage
 
-def product_list(request):
-    """ Page with all products """
-    product_list = Product.objects.all()
-    page = request.GET.get('page', 1)
 
-    paginator = Paginator(product_list, 10)
-    try:
-        products = paginator.page(page)
-    except PageNotAnInteger:
-        products = paginator.page(1)
-    except EmptyPage:
-        products = paginator.page(paginator.num_pages)
+class ProductListView(ListView):
+    model = Product
+    template_name = 'catalog/product_list.html'
+    context_object_name = 'products'
+    paginate_by = 10
 
-    context = {
-        'products': products
-    }
-    return render(request, 'catalog/product_list.html', context)
 
-def product_detail(request, pk):
+class ProductDetailView(DetailView):
     """ Product detail page """
-    product = get_object_or_404(Product, pk=pk)
-    context = {
-        'product': product
-    }
-    return render(request, 'catalog/product_detail.html', context)
+    model = Product
+    template_name = 'catalog/product_detail.html'
+    context_object_name = 'product'
 
-def home(request):
-    """ Home page with 5 latest products """
-    latest_products = Product.objects.order_by('-created_at')[:5]
-    context = {
-        'products': latest_products
-    }
-    return render(request, 'catalog/home.html', context)
 
-def contacts(request):
-    """ Page with contact info """
-    if request.method == 'POST':
-        name = request.POST.get('name')
-        phone = request.POST.get('phone')
-        message = request.POST.get('message')
-        return HttpResponse(f'Thanks, {name}! Message received.')
-    return render(request, 'catalog/contacts.html')
+class HomeProductListView(ListView):
+    model = Product
+    template_name = 'catalog/home.html'
+    context_object_name = 'products'
 
-class ProductForm(forms.ModelForm):
-    class Meta:
-        model = Product
-        fields = ['name', 'description', 'pic', 'price', 'category']
+    def get_queryset(self):
+        return Product.objects.all()[:5]
 
-def add_product(request):
-    """ Page with add product form """
-    if request.method == 'POST':
-        form = ProductForm(request.POST, request.FILES)
-        if form.is_valid():
-            form.save()
-            return redirect('catalog:products')
-    else:
-        form = ProductForm()
-    return render(request, 'catalog/add_product.html', {'form': form})
 
+class ContactsCreateView(CreateView):
+    """ Page for Contacts with Feedback message feature """
+    model = FeedBackMessage
+    fields = ['name', 'phone', 'message']
+    template_name = 'catalog/contacts.html'
+    success_url = reverse_lazy('catalog:feedback_success')
+
+
+class FeedBackMessageSent(TemplateView):
+    template_name = 'catalog/feedback_success.html'
+
+
+class AddProduct(CreateView):
+    model = Product
+    fields = ['name', 'description', 'pic', 'price']
+    template_name = 'catalog/add_product.html'
+    success_url = reverse_lazy('catalog:product_created')
+
+class ProductCreated(TemplateView):
+    template_name = 'catalog/product_created.html'
