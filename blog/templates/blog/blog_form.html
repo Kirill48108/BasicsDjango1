@@ -1,0 +1,20 @@
+{% extends 'catalog/base.html' %}
+{% block main_menu %}
+  {% include 'catalog/menu.html' %}
+{% endblock %}
+{% block content %}
+  <h1>{% if form.instance.pk %}Редактировать запись{% else %}Создать запись{% endif %}</h1>
+  <form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Сохранить</button>
+  </form>
+  <p>
+    {% if form.instance.pk %}
+      <a href="{% url 'blog:blog_detail' form.instance.pk %}">Отмена</a>
+    {% else %}
+      <a href="{% url 'blog:blog_list' %}">Отмена</a>
+    {% endif %}
+  </p>
+{% endblock %}
+

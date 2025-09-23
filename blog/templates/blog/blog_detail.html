@@ -1,0 +1,17 @@
+{% extends 'catalog/base.html' %}
+{% block main_menu %}
+  {% include 'catalog/menu.html' %}
+{% endblock %}
+{% block content %}
+  <h1>{{ post.title }}</h1>
+  {% if post.image %}
+    <p><img src="{{ post.image.url }}" alt="{{ post.title }}" style="max-width: 400px;"></p>
+  {% endif %}
+  <div>{{ post.content|linebreaks }}</div>
+  <p>Просмотры: {{ post.views }}</p>
+  <p>
+    <a href="{% url 'blog:blog_update' post.pk %}">Редактировать</a> |
+    <a href="{% url 'blog:blog_delete' post.pk %}">Удалить</a> |
+    <a href="{% url 'blog:blog_list' %}">К списку</a>
+  </p>
+{% endblock %}
