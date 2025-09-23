@@ -1,0 +1,35 @@
+{% load static %}
+<!doctype html>
+<html lang="en" data-bs-theme="auto">
+<head>
+    <script src="{% static 'js/color-modes.js' %}"></script>
+    <!-- ... existing code ... -->
+    <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static 'css/custom.css' %}" rel="stylesheet">
+    <!-- ... existing code ... -->
+</head>
+<body>
+<!-- ... existing code ... -->
+<header data-bs-theme="dark">
+    {% include 'catalog/menu.html'%}
+</header>
+
+<main class="container my-4">
+    {% block content %}{% endblock %}
+</main>
+
+<!-- ... existing code ... -->
+<footer class="text-body-secondary py-5 mt-3">
+    <div class="container">
+        <p class="float-end mb-1">
+            <a href="#">Наверх</a>
+        </p>
+        <p class="mb-1">Сайт создан с использованием Bootstrap</p>
+        <p class="mb-0">Впервые здесь? <a href="{% url 'catalog:home' %}">На главную</a>.</p>
+    </div>
+</footer>
+<script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+</body>
+</html>
+
+

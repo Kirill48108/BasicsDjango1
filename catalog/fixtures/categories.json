@@ -1,0 +1,18 @@
+[
+  {
+    "model": "catalog.category",
+    "pk": 1,
+    "fields": {
+      "name": "Кофе",
+      "description": "Кофе в зёрнах"
+    }
+  },
+  {
+    "model": "catalog.category",
+    "pk": 2,
+    "fields": {
+      "name": "Чай",
+      "description": "Чай листовой на любой вкус"
+    }
+  }
+]
