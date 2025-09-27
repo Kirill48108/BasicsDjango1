@@ -1,6 +1,7 @@
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView, TemplateView
 from django.views.generic import UpdateView, DeleteView
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 from catalog.models import Product, FeedBackMessage
 from catalog.forms import ProductForm
@@ -35,19 +36,19 @@ class FeedBackMessageSent(TemplateView):
     template_name = 'catalog/feedback_success.html'
 
 
-class ProductCreateView(CreateView):
+class ProductCreateView(LoginRequiredMixin,CreateView):
     model = Product
     form_class = ProductForm
     template_name = 'product_form.html'
     success_url = reverse_lazy('catalog:products')
 
-class ProductUpdateView(UpdateView):
+class ProductUpdateView(LoginRequiredMixin,UpdateView):
     model = Product
     form_class = ProductForm
     template_name = 'product_form.html'
     success_url = reverse_lazy('catalog:products')
 
-class ProductDeleteView(DeleteView):
+class ProductDeleteView(LoginRequiredMixin,DeleteView):
     model = Product
     template_name = 'catalog/product_confirm_delete.html'
     success_url = reverse_lazy('catalog:products')

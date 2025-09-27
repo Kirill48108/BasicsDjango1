@@ -29,6 +29,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'catalog',
     'blog',
+    'users',
+
 ]
 
 MIDDLEWARE = [
@@ -122,3 +124,16 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+# Кастомная модель пользователя
+AUTH_USER_MODEL = 'users.User'
+
+# Аутентификация/редиректы
+LOGIN_URL = 'users:login'
+LOGIN_REDIRECT_URL = 'catalog:products'
+LOGOUT_REDIRECT_URL = 'catalog:home'
+
+# Отправка писем (для разработки — в консоль)
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+DEFAULT_FROM_EMAIL = 'no-reply@example.com'
