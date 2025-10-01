@@ -1,0 +1,18 @@
+{% extends 'catalog/base.html' %}
+{% block main_menu %}
+  {% include 'catalog/menu.html' %}
+{% endblock %}
+{% block content %}
+  <h1>Блог</h1>
+  <p><a href="{% url 'blog:blog_create' %}">Создать запись</a></p>
+  <ul>
+    {% for post in posts %}
+      <li>
+        <a href="{% url 'blog:blog_detail' post.pk %}">{{ post.title }}</a>
+        <small>Просмотры: {{ post.views }}</small>
+      </li>
+    {% empty %}
+      <li>Пока нет опубликованных записей.</li>
+    {% endfor %}
+  </ul>
+{% endblock %}
