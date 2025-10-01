@@ -1,0 +1,56 @@
+{% extends "users/base.html" %}
+{% load from_extras %}
+{% block title %}Профиль{% endblock %}
+{% block content %}
+<div class="mb-2"><span class="badge text-bg-secondary"></span></div>
+<div class="auth-card card mt-1">  <!-- было mt-2 -->
+  <div class="card-header">
+    <h3 class="m-0">Профиль</h3>
+  </div>
+  <div class="card-body">
+    <form method="post" enctype="multipart/form-data" novalidate>
+      {% csrf_token %}
+      {{ form.non_field_errors }}
+      <div class="row g-3">
+        <div class="col-12">
+          <label class="form-label" for="{{ form.avatar.id_for_label }}">Аватар</label>
+          {{ form.avatar|add_class:"form-control" }}
+          {% if form.avatar.errors %}
+            <div class="invalid-feedback d-block">{{ form.avatar.errors|striptags }}</div>
+          {% endif %}
+          {% if request.user.avatar %}
+            <div class="mt-2">
+              <img src="{{ request.user.avatar.url }}" alt="avatar" class="img-thumbnail" style="max-height: 120px;">
+            </div>
+          {% endif %}
+        </div>
+        <div class="col-md-6">
+          <label class="form-label" for="{{ form.phone.id_for_label }}">Телефон</label>
+          {{ form.phone|add_class:"form-control" }}
+          {% if form.phone.errors %}
+            <div class="invalid-feedback d-block">{{ form.phone.errors|striptags }}</div>
+          {% endif %}
+        </div>
+        <div class="col-md-6">
+          <label class="form-label" for="{{ form.country.id_for_label }}">Страна</label>
+          {{ form.country|add_class:"form-control" }}
+          {% if form.country.errors %}
+            <div class="invalid-feedback d-block">{{ form.country.errors|striptags }}</div>
+          {% endif %}
+        </div>
+      </div>
+      <button type="submit" class="btn btn-primary w-100 mt-3">Сохранить изменения</button> <!-- было mt-4 -->
+    </form>
+    <hr class="my-3"> <!-- было my-4 -->
+    <div class="d-flex gap-2">
+      <a class="btn btn-outline-secondary" href="/">На главную</a>
+      <form action="{% url 'users:logout' %}" method="post" class="d-inline ms-auto">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-outline-danger">Выйти</button>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+
