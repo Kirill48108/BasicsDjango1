@@ -72,6 +72,24 @@ argon2 = ["argon2-cffi (>=19.1.0)"]
 bcrypt = ["bcrypt"]
 
 [[package]]
+name = "django-redis"
+version = "6.0.0"
+description = "Full featured redis cache backend for Django."
+optional = false
+python-versions = ">=3.9"
+files = [
+    {file = "django_redis-6.0.0-py3-none-any.whl", hash = "sha256:20bf0063a8abee567eb5f77f375143c32810c8700c0674ced34737f8de4e36c0"},
+    {file = "django_redis-6.0.0.tar.gz", hash = "sha256:2d9cb12a20424a4c4dde082c6122f486628bae2d9c2bee4c0126a4de7fda00dd"},
+]
+
+[package.dependencies]
+Django = ">=4.2"
+redis = ">=4.0.2"
+
+[package.extras]
+hiredis = ["redis[hiredis] (>=4.0.2)"]
+
+[[package]]
 name = "executing"
 version = "2.2.0"
 description = "Get the currently executing AST node of a frame, and other information"
@@ -472,6 +490,36 @@ files = [
 cli = ["click (>=5.0)"]
 
 [[package]]
+name = "redis"
+version = "6.4.0"
+description = "Python client for Redis database and key-value store"
+optional = false
+python-versions = ">=3.9"
+files = [
+    {file = "redis-6.4.0-py3-none-any.whl", hash = "sha256:f0544fa9604264e9464cdf4814e7d4830f74b165d52f2a330a760a88dd248b7f"},
+    {file = "redis-6.4.0.tar.gz", hash = "sha256:b01bc7282b8444e28ec36b261df5375183bb47a07eb9c603f284e89cbc5ef010"},
+]
+
+[package.extras]
+hiredis = ["hiredis (>=3.2.0)"]
+jwt = ["pyjwt (>=2.9.0)"]
+ocsp = ["cryptography (>=36.0.1)", "pyopenssl (>=20.0.1)", "requests (>=2.31.0)"]
+
+[[package]]
+name = "redis-cli"
+version = "1.0.1"
+description = "A Redis Python Client"
+optional = false
+python-versions = ">=3.7"
+files = [
+    {file = "redis-cli-1.0.1.tar.gz", hash = "sha256:6be46d8e6ae638fec27cb425d499b7f25b1592402c74d5d17f5b85b5e7f988a0"},
+    {file = "redis_cli-1.0.1-py3-none-any.whl", hash = "sha256:e9f6af4a8b7591d8bfd1e23be89bdd9666ce824df881748fb02b88dd30575dc8"},
+]
+
+[package.dependencies]
+redis = ">=4"
+
+[[package]]
 name = "sqlparse"
 version = "0.5.3"
 description = "A non-validating SQL parser."
@@ -545,4 +593,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.13"
-content-hash = "899bf9ad26bc56e159e0a0965eb26302fd1f71bfe6338c0945c4eca89319088d"
+content-hash = "1784b58cb1356f7799703f64dd356eb82e98ce1e3500a9525cfeacd621e88db1"

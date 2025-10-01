@@ -63,6 +63,35 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'config.wsgi.application'
 
+CACHE_ENABLED = os.getenv('CACHE_ENABLED', 'true').lower() in ('1', 'true', 'yes')
+CACHE_TTL = int(os.getenv('CACHE_TTL', '300'))
+
+REDIS_URL = os.getenv('REDIS_URL', 'redis://127.0.0.1:6379/1')
+
+if CACHE_ENABLED:
+    CACHES = {
+        'default': {
+            'BACKEND': 'django_redis.cache.RedisCache',
+            'LOCATION': REDIS_URL,
+            'OPTIONS': {
+                'CLIENT_CLASS': 'django_redis.client.DefaultClient',
+
+            },
+            'KEY_PREFIX': os.getenv('CACHE_KEY_PREFIX', 'basicsdjango1'),
+            'TIMEOUT': CACHE_TTL,
+        }
+    }
+else:
+    # "пустой" кэш — отключает фактическое кеширование, чтобы не менять код
+    CACHES = {
+        'default': {
+            'BACKEND': 'django.core.cache.backends.dummy.DummyCache',
+        }
+    }
+
+
+
+
 
 
 DATABASES = {
