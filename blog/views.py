@@ -1,8 +1,8 @@
 from django.db.models import F
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
-from.models import BlogPost
-
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
+from .models import BlogPost
 
 
 class BlogPostListView(ListView):
@@ -24,23 +24,24 @@ class BlogPostDetailView(DetailView):
         self.object.refresh_from_db(fields=['views'])
         return response
 
-
-class BlogPostCreateView(CreateView):
+class BlogPostCreateView(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
     model = BlogPost
     fields = ['title', 'content', 'image', 'is_published']
     template_name = 'blog/blog_form.html'
+    permission_required = ('blog.add_blogpost',)
 
-
-class BlogPostUpdateView(UpdateView):
+class BlogPostUpdateView(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
     model = BlogPost
     fields = ['title', 'content', 'image', 'is_published']
     template_name = 'blog/blog_form.html'
+    permission_required = ('blog.change_blogpost',)
 
     def get_success_url(self):
         return self.object.get_absolute_url()
 
-
-class BlogPostDeleteView(DeleteView):
+class BlogPostDeleteView(LoginRequiredMixin, PermissionRequiredMixin, DeleteView):
     model = BlogPost
     template_name = 'blog/blog_confirm_delete.html'
     success_url = reverse_lazy('blog:blog_list')
+    permission_required = ('blog.delete_blogpost',)
+

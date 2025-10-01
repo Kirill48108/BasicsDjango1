@@ -10,8 +10,10 @@
   <div>{{ post.content|linebreaks }}</div>
   <p>Просмотры: {{ post.views }}</p>
   <p>
-    <a href="{% url 'blog:blog_update' post.pk %}">Редактировать</a> |
-    <a href="{% url 'blog:blog_delete' post.pk %}">Удалить</a> |
+    {% if request.user.is_authenticated and request.user.has_perms:"blog.change_blogpost,blog.delete_blogpost" %}
+      <a href="{% url 'blog:blog_update' post.pk %}">Редактировать</a> |
+      <a href="{% url 'blog:blog_delete' post.pk %}">Удалить</a> |
+    {% endif %}
     <a href="{% url 'blog:blog_list' %}">К списку</a>
   </p>
 {% endblock %}

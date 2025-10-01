@@ -1,10 +1,13 @@
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView, TemplateView
 from django.views.generic import UpdateView, DeleteView
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin,UserPassesTestMixin
 
 from catalog.models import Product, FeedBackMessage
 from catalog.forms import ProductForm
+from django.contrib.auth.mixins import PermissionRequiredMixin
+from django.shortcuts import get_object_or_404, redirect
+from django.views import View
 
 class ProductListView(ListView):
     model = Product
@@ -36,19 +39,47 @@ class FeedBackMessageSent(TemplateView):
     template_name = 'catalog/feedback_success.html'
 
 
-class ProductCreateView(LoginRequiredMixin,CreateView):
+class ProductCreateView(LoginRequiredMixin, CreateView):
     model = Product
     form_class = ProductForm
     template_name = 'product_form.html'
     success_url = reverse_lazy('catalog:products')
 
-class ProductUpdateView(LoginRequiredMixin,UpdateView):
+    def form_valid(self, form):
+        # ВАЖНО: назначаем владельца текущего пользователя
+        form.instance.owner = self.request.user
+        return super().form_valid(form)
+
+class ProductUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Product
     form_class = ProductForm
     template_name = 'product_form.html'
     success_url = reverse_lazy('catalog:products')
 
-class ProductDeleteView(LoginRequiredMixin,DeleteView):
+    def test_func(self):
+        obj = self.get_object()
+        # Редактировать может только владелец
+        return obj.owner_id == self.request.user.id
+
+
+
+class ProductDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     model = Product
     template_name = 'catalog/product_confirm_delete.html'
     success_url = reverse_lazy('catalog:products')
+
+    def test_func(self):
+        obj = self.get_object()
+        user = self.request.user
+        # Удалять может владелец или любой пользователь с правом delete_product (модератор)
+        return (obj.owner_id == user.id) or user.has_perm('catalog.delete_product')
+
+# Доп. действие: отмена публикации — только при праве catalog.can_unpublish_product
+class ProductUnpublishView(LoginRequiredMixin, PermissionRequiredMixin, View):
+    permission_required = 'catalog.can_unpublish_product'
+
+    def post(self, request, *args, **kwargs):
+        product = get_object_or_404(Product, pk=kwargs.get('pk'))
+        product.is_published = False
+        product.save(update_fields=['is_published'])
+        return redirect('catalog:product_detail', pk=product.pk)
